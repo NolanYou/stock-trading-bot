@@ -3,7 +3,6 @@ import threading
 import alpaca_trade_api as tradeapi
 import json as jason
 
-open('AlpacaKeys.json')
 with open('AlpacaKeys.json', 'r') as myfile:
     data=myfile.read()
 
