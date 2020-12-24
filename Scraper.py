@@ -27,7 +27,7 @@ pinned_posts = reddit.subreddit('WallStreetBets').sticky()
 pinned_posts.comments.replace_more(limit=0)
 
 #These pop up way too frequently. Send help :(
-bannedWords = {"AOC", "WSB", "BULL", "LOL", "GIVE", "CNBC", "WSJ", "WILL"}
+bannedWords = {"AOC", "WSB", "BULL", "LOL", "GIVE", "CNBC", "WSJ", "WILL", "YOLO", "LMAO"}
 
 
 for top_level_comment in pinned_posts.comments:
