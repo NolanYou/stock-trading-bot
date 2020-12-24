@@ -2,38 +2,56 @@ import threading
 
 import alpaca_trade_api as tradeapi
 import json as jason
+import yfinance as wahoo
 
-with open('AlpacaKeys.json', 'r') as myfile:
-    data=myfile.read()
+class DataGetter():
+    def __init__(self, stockNames):
+        self.stockNames = stockNames
+        with open('AlpacaKeys.json', 'r') as myfile:
+            data=myfile.read()
 
-vals = jason.loads(data)
-# authentication and connection details
-api_key = str(vals['key'])
-api_secret = str(vals['secretKey'])
-base_url = str(vals['url'])
+        vals = jason.loads(data)
+        # authentication and connection details
+        self.api_key = str(vals['key'])
+        self.api_secret = str(vals['secretKey'])
+        self.base_url = str(vals['url'])
 
-# instantiate REST API
-api = tradeapi.REST(api_key, api_secret, base_url, api_version='v2')
-
-# obtain account information
-account = api.get_account()
+    def getUserData(self):
 
 
-print(account)
+        # instantiate REST API
+        api = tradeapi.REST(self.api_key, self.api_secret, self.base_url, api_version='v2')
 
-conn = tradeapi.stream2.StreamConn(api_key, api_secret, base_url)
+        # obtain account information
+        account = api.get_account()
 
-@conn.on(r'^account_updates$')
-async def on_account_updates(conn, channel, account):
-    print('account', account)
+        print(account)
 
-@conn.on(r'^trade_updates$')
-async def on_trade_updates(conn, channel, trade):
-    print('trade', trade)
+        conn = tradeapi.stream2.StreamConn(self.api_key, self.api_secret, self.base_url)
 
-def ws_start():
-	conn.run(['account_updates', 'trade_updates'])
+        @conn.on(r'^account_updates$')
+        async def on_account_updates(conn, channel, account):
+            print('account', account)
 
-#start WebSocket in a thread
-ws_thread = threading.Thread(target=ws_start, daemon=True)
-ws_thread.start()
+        @conn.on(r'^trade_updates$')
+        async def on_trade_updates(conn, channel, trade):
+            print('trade', trade)
+
+
+
+        connInitArr = ['account_updates', 'trade_updates']
+
+        def ws_start():
+            conn.run(connInitArr)
+
+        #start WebSocket in a thread
+        ws_thread = threading.Thread(target=ws_start, daemon=True)
+        ws_thread.start()
+
+    def getStockData(self):
+        self.historical_datas = {}
+        for ticker in self.stockNames:
+            self.historical_datas[ticker] = wahoo.get_data(ticker)
+
+    def getCurrentStockVal(self):
+        historical_datas[ticker]
