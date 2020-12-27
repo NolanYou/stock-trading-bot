@@ -1,6 +1,11 @@
 from DataCollection import DataGetter
+from Scraper import Scraper
 
-stockNames = ["AAPL", "TSLA"]
+sc = Scraper()
+sc.update()
+sc.printStocks()
+stockNames = sc.returnStocksDict()
 dg = DataGetter(stockNames)
 dg.getUserData()
-dg.getStockData()
+dg.updateStockData("1d", "1m")
+print(dg.getCurrentStockVal(stockNames[1]))
