@@ -10,6 +10,7 @@ class Scraper():
 
     def __init__(self):
         self.tickerDict = defaultdict(int)
+        self.update()
 
     def update(self):
         with open('AlpacaKeys.json', 'r') as myfile:
@@ -31,7 +32,7 @@ class Scraper():
         pinned_posts.comments.replace_more(limit=0)
 
         #These pop up way too frequently. Send help :(
-        bannedWords = {"AOC", "WSB", "BULL", "LOL", " GIVE", "CNBC", "WSJ", "WILL", "YOLO", "LMAO", "AINT", "LETS", "SEC", "GPA", "ELON", "CCP", "KEK"}
+        bannedWords = {"AOC", "WSB", "BULL", "LOL", " GIVE", "CNBC", "WSJ", "WILL", "YOLO", "LMAO", "AINT", "LETS", "SEC", "GPA", "ELON", "CCP", "KEK", "OPEN", "SEC.", "HELL", "MOON"}
 
 
         for top_level_comment in pinned_posts.comments:

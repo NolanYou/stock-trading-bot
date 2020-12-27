@@ -16,9 +16,8 @@ class DataGetter():
         self.api_key = str(vals['key'])
         self.api_secret = str(vals['secretKey'])
         self.base_url = str(vals['url'])
-
+        self.updateStockData("1d", "1m")
     def getUserData(self):
-
 
         # instantiate REST API
         api = tradeapi.REST(self.api_key, self.api_secret, self.base_url, api_version='v2')
@@ -32,4 +31,8 @@ class DataGetter():
 
 
     def getCurrentStockVal(self, ticker):
-        return self.historical_datas[ticker].iloc[len(self.historical_datas[ticker]) - 1].to_dict().get('Close')
+        try:
+            return self.historical_datas[ticker].iloc[len(self.historical_datas[ticker]) - 1].to_dict().get('Close')
+        except:
+            return -1
+
