@@ -5,6 +5,14 @@ import datetime as ts
 
 class Trader:
 	def __init__(self, stockName, stockTotal, data):
+		with open('AlpacaKeys.json', 'r') as myfile:
+			f = myfile.read()
+
+		vals = jason.loads(f)
+		# authentication and connection details
+		self.api_key = str(vals['key'])
+		self.api_secret = str(vals['secretKey'])
+		self.base_url = str(vals['url'])
 		with open('TradeConstants.json', 'r') as myfile:
 			file = myfile.read()
 
@@ -12,8 +20,8 @@ class Trader:
 		# authentication and connection details
 
 		self.stockName = stockName
-		self.marginPos = str(vals['PosProfitMargin'])
-		self.marginNeg = str(vals['NegProfitMargin'])
+		self.marginPos = vals['PosProfitMargin']
+		self.marginNeg = vals['NegProfitMargin']
 		self.stockTotal = stockTotal
 		self.data = data
 		self.getData()
@@ -24,18 +32,20 @@ class Trader:
 		self.initPrice = self.data.getCurrentStockVal(self.stockName)
 
 	def buy(self):
-		stockNumber = self.stockTotal / self.initPrice
+		stockNumber = self.stockTotal // self.initPrice
 		try:
-			tradeapi.submit_order(symbol=self.stockName,
-								  qty=stockNumber,
-								  side='buy',
-								  time_in_force='gtc',
-								  type='limit',
-								  client_order_id=1,
-								  order_class='bracket',
-								  stop_loss=dict(self.initPrice * (1 + self.marginNeg)),
-								  take_profit=dict(self.initPrice * (1 + self.marginPos)))
+			api = tradeapi.REST(self.api_key, self.api_secret, self.base_url, api_version='v2')
+			api.submit_order(symbol=self.stockName,
+									  qty=stockNumber,
+									  side='buy',
+									  time_in_force='gtc',
+									  type='limit',
+									  limit_price=self.initPrice,
+									  order_class='bracket',
+									  stop_loss= dict(stop_price=str(self.initPrice * (1 - self.marginNeg))),
+									  take_profit=dict(limit_price=str(self.initPrice * (1 + self.marginPos))))
 		except:
+			print("fail")
 			return -1
 
 

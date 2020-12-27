@@ -1,11 +1,11 @@
-from DataCollection import DataGetter
-from Scraper import Scraper
+import alpaca_trade_api as tradeapi
 
-sc = Scraper()
-sc.update()
-sc.printStocks()
-stockNames = sc.returnStocksDict()
-dg = DataGetter(stockNames)
-dg.getUserData()
-dg.updateStockData("1d", "1m")
-print(dg.getCurrentStockVal(stockNames[1]))
+
+tradeapi.submit_order(symbol="AAPL",
+								  qty=1,
+								  side='buy',
+								  time_in_force='gtc',
+								  type='limit',
+								  client_order_id=1,
+								  order_class='bracket',
+								  take_profit=dict(131.97))
