@@ -18,8 +18,7 @@ def update():
     dg.updateStockData("1d", "1m")
 
 def checkAccount():
-    if(float(dg.getUserData().cash) <= lowAccountFunds):
-        return False
+    return not float(dg.getUserData().cash) <= lowAccountFunds
 
 tr1 = Trader(stonks[0], 40000, dg)
 tr2 = Trader(stonks[1], 20000, dg)
