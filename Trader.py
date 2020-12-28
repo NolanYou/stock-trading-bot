@@ -13,7 +13,7 @@ class Trader:
 		self.api_key = str(vals['key'])
 		self.api_secret = str(vals['secretKey'])
 		self.base_url = str(vals['url'])
-		with open('TradeConstants.json', 'r') as myfile:
+		with open('tradeConstants.json', 'r') as myfile:
 			file = myfile.read()
 
 		vals = jason.loads(file)
