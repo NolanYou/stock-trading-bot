@@ -33,7 +33,7 @@ tr5.buy()
 
 while True:
     if(checkAccount()):
-        trCons = Trader(stonks[0], dg.getUserData().get("Cash") - 25000, dg)
+        trCons = Trader(stonks[0], float(dg.getUserData().buying_power) - 25000, dg)
         trCons.buy()
     update()
 
